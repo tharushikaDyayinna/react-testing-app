@@ -1,0 +1,15 @@
+___install disk quota_____
+sudo apt install quota
+quota --version
+sudo nano /etc/fstab
+
+UUID=<UUID> /mnt/data ext4 defaults 0 2
+UUID=<UUID> /mnt/data ext4 defaults usrquota ,grpquota 0 2
+
+sudo mount -o remount /
+mount | grep /mnt/point
+sudo quotacheck -cug /
+sudo quotaon -av 
+sudo edquota -u guestuser
+sudo edquota -t
+sudo repquota -a
