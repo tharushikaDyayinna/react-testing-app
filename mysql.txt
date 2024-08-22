@@ -1,0 +1,28 @@
+____apache,mysql,php_____
+sudo apt install apache2
+sudo systemctl status apache2
+sudo apt install mysql-server
+CREATE DATABSE myDB;
+mysql -u tcuser -p 
+CREATE TABLE Person(
+Name VARCHAR(250),
+Password VARCHAR(250)
+);
+sudo apt-get install php
+sudo sytem ctl restart apache2
+php -v
+sudo nano /etc/apache2/sites-available/000-default.conf
+sudo systemctl reload apache2
+<!DOCTYPE html> 
+<html> 
+<head> 
+<title>Form site</title> 
+</head> 
+<body> 
+<form method="post" action="myform.php"> 
+Username: <input type="text" name="uname"><br><br> 
+Password: <input type="password" name="upassword"><br><br> 
+<input type="submit" value="Submit"> 
+</form> 
+</body> 
+</html>
