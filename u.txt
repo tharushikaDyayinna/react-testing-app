@@ -1,0 +1,100 @@
+sudo apt update && sudo apt upgrade -y
+
+sudo nano /etc/dhcp/dhcp.conf
+
+sudo cp /etc/dhcp/dhcp.conf /etc/dhcp/dhcp.conf.backup
+
+subnet 10.10.10.0 netmask 255.255.255.0 {
+range 10.10.10.100 10.10.10.200;
+option domain-name-server 8.8.8.8,8.8.4.4;
+}
+
+host UbuntuDesktop{
+hardware ethernet <client_mac address>;
+fixed-address 10.10.10.150;}
+
+sudo systemctl restart isc-dhcp-server
+sudo systemctl status isc-dhcp-server
+
+ip a
+
+cat /var/lib/dhcp/dhcp.leases
+
+___install disk quota_____
+sudo apt install quota
+quota --version
+sudo nano /etc/fstab
+
+UUID=<UUID> /mnt/data ext4 defaults 0 2
+UUID=<UUID> /mnt/data ext4 defaults usrquota ,grpquota 0 2
+
+sudo mount -o remount /
+mount | grep /mnt/point
+sudo quotacheck -cug /
+sudo quotaon -av 
+sudo edquota -u guestuser
+sudo edquota -t
+sudo repquota -a
+
+____apache,mysql,php_____
+sudo apt install apache2
+sudo systemctl status apache2
+sudo apt install mysql-server
+CREATE DATABSE myDB;
+mysql -u tcuser -p 
+CREATE TABLE Person(
+Name VARCHAR(250),
+Password VARCHAR(250)
+);
+
+sudo apt-get install php
+sudo sytem ctl restart apache2
+php -v
+sudo nano /etc/apache2/sites-available/000-default.conf
+sudo systemctl reload apache2
+
+<!DOCTYPE html> 
+<html> 
+<head> 
+<title>Form site</title> 
+</head> 
+<body> 
+<form method="post" action="myform.php"> 
+Username: <input type="text" name="uname"><br><br> 
+Password: <input type="password" name="upassword"><br><br> 
+<input type="submit" value="Submit"> 
+</form> 
+</body> 
+</html>
+
+<?php 
+$host = "localhost"; 
+$dbusername = "root"; 
+$dbpassword = "Testwebpw1$"; 
+$dbname = "myDB"; 
+//Create Connection 
+$conn = new mysqli ($host, $dbusername, $dbpassword, 
+$dbname); 
+$username = $_POST['uname']; 
+$password = $_POST['upassword']; 
+//Insert value in database table 
+$sql = "INSERT INTO user (name, password) values 
+('$username', '$password')"; 
+if($conn->query($sql)){ 
+echo "New record is inserted successfully"; 
+} 
+else { 
+echo "Error: ". $sql . "<br>". $conn->error; 
+} 
+$conn->close(); 
+?> 
+
+
+
+
+
+
+
+
+
+
