@@ -1,0 +1,164 @@
+import java.util.Scanner;
+
+public class CaesarCipher {
+    String readtext;
+    char Arraytext[];
+    char alphbet[] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
+    
+    int key, k; // Integer value as the key
+    static Scanner s = new Scanner(System.in);
+    
+    public class CaesarCipher() {
+        System.out.print("Enter your text: ");
+        readtext = s.nextLine();  // Use nextLine() to allow spaces
+        System.out.print("Enter your key: ");
+        key = s.nextInt();
+        readtext = readtext.toUpperCase();
+        Arraytext = readtext.toCharArray();
+    }
+    
+    public void Encript() { // Encryption method
+        for (int i = 0; i < Arraytext.length; i++) {
+            if (Character.isLetter(Arraytext[i])) {
+                for (int j = 0; j < alphbet.length; j++) {
+                    if (Arraytext[i] == alphbet[j]) {
+                        k = (j + key) % 26;
+                        break;
+                    }
+                }
+                System.out.print(alphbet[k]);
+            } else {
+                System.out.print(Arraytext[i]);  // Keep non-alphabet characters unchanged
+            }
+        }
+        System.out.println();  // Move to the next line after encryption
+    }
+    
+    public void Decript() { // Decryption method
+        for (int i = 0; i < Arraytext.length; i++) {
+            if (Character.isLetter(Arraytext[i])) {
+                for (int j = 0; j < alphbet.length; j++) {
+                    if (Arraytext[i] == alphbet[j]) {
+                        k = (j - key + 26) % 26;
+                        break;
+                    }
+                }
+                System.out.print(alphbet[k]);
+            } else {
+                System.out.print(Arraytext[i]);  // Keep non-alphabet characters unchanged
+            }
+        }
+        System.out.println();  // Move to the next line after decryption
+    }
+    
+    public static void main(String[] args) {
+        CaesarCipher c = new CaesarCipher();
+        System.out.print("Do you want Encrypt(1) or Decrypt(0)? .....(1/0): ");
+        int choose = s.nextInt();
+        
+        if (choose == 1)
+            c.Encript();
+        else
+            c.Decript();
+    }
+}
+
+_____________________________________________________________________________________
+
+import java.util.Scanner;
+
+public class RailFenceCipher {
+    String plaintext;
+    int key;
+    static Scanner s = new Scanner(System.in);
+
+    public RailFenceCipher() {
+        System.out.print("Enter your text: ");
+        plaintext = s.nextLine();
+        System.out.print("Enter the number of rails: ");
+        key = s.nextInt();
+    }
+
+    public String encrypt() {
+        char[][] rail = new char[key][plaintext.length()];
+
+        // Filling rail matrix with blank spaces
+        for (int i = 0; i < key; i++)
+            for (int j = 0; j < plaintext.length(); j++)
+                rail[i][j] = '\n';
+
+        boolean dir_down = false;
+        int row = 0, col = 0;
+
+        for (int i = 0; i < plaintext.length(); i++) {
+            if (row == 0 || row == key - 1)
+                dir_down = !dir_down;
+
+            rail[row][col++] = plaintext.charAt(i);
+
+            row += dir_down ? 1 : -1;
+        }
+
+        StringBuilder result = new StringBuilder();
+        for (int i = 0; i < key; i++)
+            for (int j = 0; j < plaintext.length(); j++)
+                if (rail[i][j] != '\n')
+                    result.append(rail[i][j]);
+
+        return result.toString();
+    }
+
+    public String decrypt() {
+        char[][] rail = new char[key][plaintext.length()];
+
+        for (int i = 0; i < key; i++)
+            for (int j = 0; j < plaintext.length(); j++)
+                rail[i][j] = '\n';
+
+        boolean dir_down = false;
+        int row = 0, col = 0;
+
+        for (int i = 0; i < plaintext.length(); i++) {
+            if (row == 0 || row == key - 1)
+                dir_down = !dir_down;
+
+            rail[row][col++] = '*';
+
+            row += dir_down ? 1 : -1;
+        }
+
+        int index = 0;
+        for (int i = 0; i < key; i++)
+            for (int j = 0; j < plaintext.length(); j++)
+                if (rail[i][j] == '*' && index < plaintext.length())
+                    rail[i][j] = plaintext.charAt(index++);
+
+        StringBuilder result = new StringBuilder();
+
+        row = 0; col = 0;
+        for (int i = 0; i < plaintext.length(); i++) {
+            if (row == 0 || row == key - 1)
+                dir_down = !dir_down;
+
+            if (rail[row][col] != '\n')
+                result.append(rail[row][col++]);
+
+            row += dir_down ? 1 : -1;
+        }
+
+        return result.toString();
+    }
+
+    public static void main(String[] args) {
+        RailFenceCipher rfc = new RailFenceCipher();
+        System.out.print("Do you want Encrypt(1) or Decrypt(0)? .....(1/0): ");
+        int choose = s.nextInt();
+        s.nextLine();  // Consume the newline character
+
+        if (choose == 1)
+            System.out.println("Encrypted Text: " + rfc.encrypt());
+        else
+            System.out.println("Decrypted Text: " + rfc.decrypt());
+    }
+}
+_______________________________________________________________________________________
